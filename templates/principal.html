@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Principal</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#667eea,#1a45bb);
+}
+
+.dashboard{
+    width:450px;
+    padding:40px;
+    border-radius:25px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 8px 32px rgba(0,0,0,0.2);
+    text-align:center;
+    color:white;
+    animation:fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.avatar{
+    font-size:70px;
+    margin-bottom:15px;
+}
+
+h1{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+p{
+    color:rgba(255,255,255,0.85);
+    margin-bottom:30px;
+}
+
+.btn-container{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.btn{
+    text-decoration:none;
+    padding:15px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn-search{
+    background:white;
+    color:#3107ec;
+}
+
+.btn-search:hover{
+    transform:translateY(-3px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-logout{
+    background:#f82424;
+    color:white;
+}
+
+.btn-logout:hover{
+    background:#ff1a1a;
+    transform:translateY(-3px);
+}
+
+.footer{
+    margin-top:25px;
+    font-size:13px;
+    color:rgba(255,255,255,0.7);
+}
+
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+    <div class="avatar">
+        <i class="fas fa-user-circle"></i>
+    </div>
+
+    <h1>Bienvenido, {{ nombre }}</h1>
+
+    <p>
+        Has ingresado correctamente al sistema web de control de inventario.
+    </p>
+
+    <div class="btn-container">
+
+        <a href="/buscador" class="btn btn-search">
+            <i class="fas fa-search"></i>
+            Ir al Buscador
+        </a>
+
+        <a href="/logout" class="btn btn-logout">
+            <i class="fas fa-sign-out-alt"></i>
+            Salir del Sistema
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

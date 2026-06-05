@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buscador de Productos</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#667eea,#2537d8);
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:650px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    padding:35px;
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 8px 32px rgba(0,0,0,0.2);
+    color:white;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.search-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.search-box input{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    outline:none;
+    font-size:15px;
+    background:rgba(255,255,255,0.2);
+    color:black;
+}
+
+.search-box input::placeholder{
+    color:rgba(0,0,0,0.6);
+}
+
+.search-box button{
+    padding:14px 22px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    background:white;
+    color:#2537d8;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.search-box button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.result-card{
+    display:none;
+    background:rgba(255,255,255,0.85);
+    border-radius:15px;
+    padding:20px;
+    margin-top:15px;
+    animation:fadeIn .4s ease;
+    color:black;
+}
+
+.result-card h3{
+    margin-bottom:15px;
+    color:black;
+}
+
+.result-card p{
+    margin-bottom:10px;
+    color:black;
+}
+
+.result-card strong{
+    color:black;
+}
+
+.not-found{
+    display:none;
+    background:rgba(255,0,0,0.2);
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+    margin-top:15px;
+    color:white;
+    font-weight:bold;
+}
+
+.nav-actions{
+    margin-top:25px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.link{
+    text-decoration:none;
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.15);
+    transition:.3s;
+}
+
+.link:hover{
+    background:rgba(255,255,255,0.25);
+}
+
+.link-danger{
+    background:#f1051d;
+}
+
+.link-danger:hover{
+    background:#d12436;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>
+        <i class="fas fa-search"></i>
+        Buscador de Productos
+    </h2>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="codigoInput"
+            placeholder="Ingrese código del producto (Ej: P001)">
+
+        <button onclick="buscarProducto()">
+            Buscar
+        </button>
+    </div>
+
+    <div id="resultado" class="result-card"></div>
+
+    <div id="noEncontrado" class="not-found">
+        <i class="fas fa-circle-exclamation"></i>
+        Producto no registrado en la base de datos.
+    </div>
+
+    <div class="nav-actions">
+
+        <a href="/principal" class="link">
+            <i class="fas fa-arrow-left"></i>
+            Regresar
+        </a>
+
+        <a href="/logout" class="link link-danger">
+            <i class="fas fa-sign-out-alt"></i>
+            Salir
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+function buscarProducto() {
+
+    const codigo = document.getElementById('codigoInput').value.trim();
+    const resultadoDiv = document.getElementById('resultado');
+    const noEncontradoDiv = document.getElementById('noEncontrado');
+
+    resultadoDiv.style.display = 'none';
+    noEncontradoDiv.style.display = 'none';
+
+    if (!codigo) return;
+
+    fetch('/api/buscar_producto', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            codigo: codigo
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.encontrado) {
+
+            resultadoDiv.innerHTML = `
+                <h3><i class="fas fa-box"></i> ${data.nombre}</h3>
+
+                <p><strong>Código:</strong> ${data.codigo}</p>
+                <p><strong>Categoría:</strong> ${data.categoria}</p>
+                <p><strong>Descripción:</strong> ${data.descripcion}</p>
+                <p><strong>Precio:</strong> S/ ${data.precio.toFixed(2)}</p>
+                <p><strong>Stock:</strong> ${data.stock} unidades</p>
+            `;
+
+            resultadoDiv.style.display = 'block';
+
+        } else {
+
+            noEncontradoDiv.style.display = 'block';
+
+        }
+
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Ocurrió un problema al buscar el producto.');
+    });
+
+}
+
+</script>
+
+</body>
+</html>
