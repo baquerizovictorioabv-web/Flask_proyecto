@@ -173,11 +173,8 @@ button:hover{
 
     <h2>Bienvenido</h2>
 
-    {% if mensaje %}
-        <div class="error">
-            {{ mensaje }}
-        </div>
-    {% endif %}
+   <!-- Se removió Jinja2 para compatibilidad estática con Vercel -->
+    <div id="mensaje-error" class="error" style="display: none;"></div>
 
     <!-- CÓDIGO ACTUALIZADO PARA CONECTAR CON RENDER -->
 <form action="https://flask-proyecto-7xl2.onrender.com/login" method="POST">
