@@ -183,19 +183,17 @@ h2{
         Producto no registrado en la base de datos.
     </div>
 
-    <div class="nav-actions">
+<div class="nav-actions">
+    <a href="https://flask-proyecto-7xl2.onrender.com/principal" class="link">
+        <i class="fas fa-arrow-left"></i>
+        Regresar
+    </a>
 
-        <a href="/principal" class="link">
-            <i class="fas fa-arrow-left"></i>
-            Regresar
-        </a>
-
-        <a href="/logout" class="link link-danger">
-            <i class="fas fa-sign-out-alt"></i>
-            Salir
-        </a>
-
-    </div>
+    <a href="https://flask-proyecto-7xl2.onrender.com/logout" class="link link-danger">
+        <i class="fas fa-sign-out-alt"></i>
+        Salir
+    </a>
+</div>
 
 </div>
 
@@ -212,14 +210,15 @@ function buscarProducto() {
 
     if (!codigo) return;
 
-    fetch('/api/buscar_producto', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            codigo: codigo
-        })
+    // Petición asíncrona hacia la API externa de Render
+fetch('https://flask-proyecto-7xl2.onrender.com/api/buscar_producto', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        codigo: codigo
+    })
     })
     .then(response => response.json())
     .then(data => {
